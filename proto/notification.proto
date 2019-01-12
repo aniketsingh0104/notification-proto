@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package proto;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+
+//Notification request contains the type of notification to be processed
+message NotificationRequest {
+    //tells about the type of notification , three types are possible email, sms, realtime
+    string notification_id = 1;
+    //this is the data of the notification , for email this will contain sender,receiver and attachment
+    //data, for sms sender, receiver,body and for real time the type of notification query(history, 
+    //brodcasting,publishing ) and the data of notification 
+    google.protobuf.Any notification_data = 2;
+}
+
+//Emailrequest contains information about the email
+message EmailRequest {
+    //this contains the email address of sender
+    string sender = 2;
+    //this is an array of strings containing the receipients email addresses
+    repeated string receipient = 3;
+    //email addresses for carbon copy
+    repeated string cc = 4;
+    //email addresses for blind carbon copy
+    repeated string bcc = 5;
+    //email body in html
+    string html_body = 6;
+    //email body in text form , if html rendering is not supported in receiver's client
+    string text_body = 7;
+    //subject of the email
+    string subject = 8;
+    //file details if attachment if present in the email
+    string file_name = 9;
+    //character encoding for email
+    string charset = 10;
+    //file data if attachment is available
+    bytes file_data = 11;
+}
+
+//SmsRequest contains information about the sms
+message SmsRequest {
+    //this contains the sender id , it can be phone number, shortcode or alphanumeric string
+    string sender = 1;
+    //this contains the receipients mobile numbers
+    repeated string receipient = 2;
+    //this contains body of the sms
+    string body = 3;
+}
+
+//this conatins the data of real time notification
+message SendRealTimeRequest {
+    //array of channel names in which data is to be published
+    repeated string channels = 1;
+    //data to publish
+    bytes data = 2;
+}
+
+//Response of notification
+message NotificationResponse {
+    string error_status = 1;
+    int32 error_code = 2;
+}
+
+//Email response, this contains the message id of email
+message EmailResponse {
+    string message_id = 1;
+}
+
+//this contains the message id using which you can get information about the sms
+message SmsResponse {
+    string message_id = 1;
+}
+
+service NotificationsSender {
+    //method to fan out notifications to all notification types
+    rpc SendNotifications (NotificationRequest) returns (NotificationResponse);
+}
+
+service NotificationsTypes {
+    //method to send emails
+    rpc SendNotificationEmails (NotificationRequest) returns (NotificationResponse);
+    //method to send sms
+    rpc SendNotificationSms (NotificationRequest) returns (NotificationResponse);
+    //send real time notifications, get history of realTimeNotifications
+    rpc SendNotificationRealTime (NotificationRequest) returns (google.protobuf.Any);
+}
+
+service EmailSender {
+    //this sends email to all receipients
+    rpc SendEmails(EmailRequest) returns (EmailResponse);
+}
+
+service SmsSender {
+    //this sends sms to all receipients
+    rpc SendSms (SmsRequest) returns (SmsResponse);
+}
+
+service RealTimeSender {
+    //sends real time notifications, broadcasting, publishing
+    rpc SendRealTime (SendRealTimeRequest) returns (google.protobuf.Empty);
+}
+
+
+//TODO: notification, email ,sms ,centrifugo, database
+//TODO: email rate limiting,retry logic , implementation of queue
+//TODO: logging of notifications
+//TODO: SMTP and api call both options 
+//TODO: topic and queue difference
+//daylight saving

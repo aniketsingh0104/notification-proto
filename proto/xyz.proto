@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package proto;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+
+message BroadcastRequest {
+    //array containing names of channels
+    
+}
+
+message PublishRequest {
+    //channel name
+    string channel = 1;
+    bytes data = 2;
+}
+
+//this contains the channel name 
+message HistoryRequest {
+    string channel = 1;
+}
+
+//this contains the information to unsubscribe a user from a channel
+message UnsubscribeRequest {
+    //channel from which user has to unsubscribe
+    string channel = 1;
+    string user_id = 2;
+}
+
+//Disconnect user from all connections to server
+message DisconnectRequest {
+    string user_id = 3;
+}
+
+//This contains array of notifications which were published by centrifugo
+message HistoryResponse {
+    repeated Notification notifications = 1;
+}
+
+//this contains detail of every notification
+message Notification {
+    //the notification uid
+    string uid = 1;
+    //channel in which this notification was published
+    string channel = 2;
+    //raw content in bytes array format json.rawMessage
+    bytes raw_data = 3;
+    //client name/id
+    string client = 4;
+}
+
+message RealTimeRequest {
+    //array of channel names in which data is to be published
+    repeated string channels = 1;
+    //data to publish
+    bytes data = 2; 
+}
