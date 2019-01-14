@@ -74,12 +74,16 @@ message SmsResponse {
 }
 
 service NotificationsSender {
-    //method to fan out notifications to all notification types
+    //method to fan out notifications to all notification types 
+    // fan out logic here
     rpc SendNotifications (NotificationRequest) returns (NotificationResponse);
 }
 
+
 service NotificationsTypes {
     //method to send emails
+    // check bussiness setting 
+    // get template, get data , render template
     rpc SendNotificationEmails (NotificationRequest) returns (NotificationResponse);
     //method to send sms
     rpc SendNotificationSms (NotificationRequest) returns (NotificationResponse);
@@ -109,3 +113,5 @@ service RealTimeSender {
 //TODO: SMTP and api call both options 
 //TODO: topic and queue difference
 //daylight saving
+
+//TODO: goconvey tests, mocking, test implementation

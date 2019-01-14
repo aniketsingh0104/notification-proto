@@ -24,142 +24,17 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-//tells about the type of notification , three types are possible email, sms, realtime
-type NotificationRequest_NotificationName int32
-
-const (
-	NotificationRequest_EMAIL    NotificationRequest_NotificationName = 0
-	NotificationRequest_SMS      NotificationRequest_NotificationName = 1
-	NotificationRequest_REALTIME NotificationRequest_NotificationName = 2
-)
-
-var NotificationRequest_NotificationName_name = map[int32]string{
-	0: "EMAIL",
-	1: "SMS",
-	2: "REALTIME",
-}
-
-var NotificationRequest_NotificationName_value = map[string]int32{
-	"EMAIL":    0,
-	"SMS":      1,
-	"REALTIME": 2,
-}
-
-func (x NotificationRequest_NotificationName) String() string {
-	return proto.EnumName(NotificationRequest_NotificationName_name, int32(x))
-}
-
-func (NotificationRequest_NotificationName) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_736a457d4a5efa07, []int{0, 0}
-}
-
-//tells about the type of email request
-type EmailRequest_EmailType int32
-
-const (
-	EmailRequest_MARKETING          EmailRequest_EmailType = 0
-	EmailRequest_WITH_ATTACHMENT    EmailRequest_EmailType = 1
-	EmailRequest_WITHOUT_ATTACHMENT EmailRequest_EmailType = 2
-)
-
-var EmailRequest_EmailType_name = map[int32]string{
-	0: "MARKETING",
-	1: "WITH_ATTACHMENT",
-	2: "WITHOUT_ATTACHMENT",
-}
-
-var EmailRequest_EmailType_value = map[string]int32{
-	"MARKETING":          0,
-	"WITH_ATTACHMENT":    1,
-	"WITHOUT_ATTACHMENT": 2,
-}
-
-func (x EmailRequest_EmailType) String() string {
-	return proto.EnumName(EmailRequest_EmailType_name, int32(x))
-}
-
-func (EmailRequest_EmailType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_736a457d4a5efa07, []int{1, 0}
-}
-
-//Type of real time request , it can be of 4 types - SEND_NOTIFICATION for publishing and broadcasting
-//HISTORY - for getting information of all published messages
-//UNSUBSCRIBE - for unsubscribing a user from a channel
-//DISCONNECT - for disconnecting a user from all channels / server
-type RealTimeRequest_NotificationMethod int32
-
-const (
-	RealTimeRequest_SEND_NOTIFICATION RealTimeRequest_NotificationMethod = 0
-	RealTimeRequest_HISTORY           RealTimeRequest_NotificationMethod = 1
-	RealTimeRequest_UNSUBSCRIBE       RealTimeRequest_NotificationMethod = 2
-	RealTimeRequest_DISCONNECT        RealTimeRequest_NotificationMethod = 3
-)
-
-var RealTimeRequest_NotificationMethod_name = map[int32]string{
-	0: "SEND_NOTIFICATION",
-	1: "HISTORY",
-	2: "UNSUBSCRIBE",
-	3: "DISCONNECT",
-}
-
-var RealTimeRequest_NotificationMethod_value = map[string]int32{
-	"SEND_NOTIFICATION": 0,
-	"HISTORY":           1,
-	"UNSUBSCRIBE":       2,
-	"DISCONNECT":        3,
-}
-
-func (x RealTimeRequest_NotificationMethod) String() string {
-	return proto.EnumName(RealTimeRequest_NotificationMethod_name, int32(x))
-}
-
-func (RealTimeRequest_NotificationMethod) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_736a457d4a5efa07, []int{3, 0}
-}
-
-//realtime notification sending type , it can be either Broadcast or publish
-//Broadcast publishes same data into multiple channels
-//Publish publishes data only in one channel
-type SendRealTimeRequest_NotificationPublishingMethods int32
-
-const (
-	SendRealTimeRequest_BROADCAST SendRealTimeRequest_NotificationPublishingMethods = 0
-	SendRealTimeRequest_PUBLISH   SendRealTimeRequest_NotificationPublishingMethods = 1
-)
-
-var SendRealTimeRequest_NotificationPublishingMethods_name = map[int32]string{
-	0: "BROADCAST",
-	1: "PUBLISH",
-}
-
-var SendRealTimeRequest_NotificationPublishingMethods_value = map[string]int32{
-	"BROADCAST": 0,
-	"PUBLISH":   1,
-}
-
-func (x SendRealTimeRequest_NotificationPublishingMethods) String() string {
-	return proto.EnumName(SendRealTimeRequest_NotificationPublishingMethods_name, int32(x))
-}
-
-func (SendRealTimeRequest_NotificationPublishingMethods) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_736a457d4a5efa07, []int{4, 0}
-}
-
 //Notification request contains the type of notification to be processed
 type NotificationRequest struct {
-	NotificationName NotificationRequest_NotificationName `protobuf:"varint,1,opt,name=notification_name,json=notificationName,proto3,enum=proto.NotificationRequest_NotificationName" json:"notification_name,omitempty"`
+	//tells about the type of notification , three types are possible email, sms, realtime
+	NotificationId string `protobuf:"bytes,1,opt,name=notification_id,json=notificationId,proto3" json:"notification_id,omitempty"`
 	//this is the data of the notification , for email this will contain sender,receiver and attachment
 	//data, for sms sender, receiver,body and for real time the type of notification query(history,
 	//brodcasting,publishing ) and the data of notification
-	//
-	// Types that are valid to be assigned to NotificationData:
-	//	*NotificationRequest_EmailRequestData
-	//	*NotificationRequest_SmsRequestData
-	//	*NotificationRequest_RealTimeRequestData
-	NotificationData     isNotificationRequest_NotificationData `protobuf_oneof:"notification_data"`
-	XXX_NoUnkeyedLiteral struct{}                               `json:"-"`
-	XXX_unrecognized     []byte                                 `json:"-"`
-	XXX_sizecache        int32                                  `json:"-"`
+	NotificationData     *any.Any `protobuf:"bytes,2,opt,name=notification_data,json=notificationData,proto3" json:"notification_data,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *NotificationRequest) Reset()         { *m = NotificationRequest{} }
@@ -187,75 +62,22 @@ func (m *NotificationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_NotificationRequest proto.InternalMessageInfo
 
-func (m *NotificationRequest) GetNotificationName() NotificationRequest_NotificationName {
+func (m *NotificationRequest) GetNotificationId() string {
 	if m != nil {
-		return m.NotificationName
+		return m.NotificationId
 	}
-	return NotificationRequest_EMAIL
+	return ""
 }
 
-type isNotificationRequest_NotificationData interface {
-	isNotificationRequest_NotificationData()
-}
-
-type NotificationRequest_EmailRequestData struct {
-	EmailRequestData *EmailRequest `protobuf:"bytes,2,opt,name=EmailRequestData,json=emailRequestData,proto3,oneof"`
-}
-
-type NotificationRequest_SmsRequestData struct {
-	SmsRequestData *SmsRequest `protobuf:"bytes,3,opt,name=SmsRequestData,json=smsRequestData,proto3,oneof"`
-}
-
-type NotificationRequest_RealTimeRequestData struct {
-	RealTimeRequestData *RealTimeRequest `protobuf:"bytes,4,opt,name=RealTimeRequestData,json=realTimeRequestData,proto3,oneof"`
-}
-
-func (*NotificationRequest_EmailRequestData) isNotificationRequest_NotificationData() {}
-
-func (*NotificationRequest_SmsRequestData) isNotificationRequest_NotificationData() {}
-
-func (*NotificationRequest_RealTimeRequestData) isNotificationRequest_NotificationData() {}
-
-func (m *NotificationRequest) GetNotificationData() isNotificationRequest_NotificationData {
+func (m *NotificationRequest) GetNotificationData() *any.Any {
 	if m != nil {
 		return m.NotificationData
 	}
 	return nil
 }
 
-func (m *NotificationRequest) GetEmailRequestData() *EmailRequest {
-	if x, ok := m.GetNotificationData().(*NotificationRequest_EmailRequestData); ok {
-		return x.EmailRequestData
-	}
-	return nil
-}
-
-func (m *NotificationRequest) GetSmsRequestData() *SmsRequest {
-	if x, ok := m.GetNotificationData().(*NotificationRequest_SmsRequestData); ok {
-		return x.SmsRequestData
-	}
-	return nil
-}
-
-func (m *NotificationRequest) GetRealTimeRequestData() *RealTimeRequest {
-	if x, ok := m.GetNotificationData().(*NotificationRequest_RealTimeRequestData); ok {
-		return x.RealTimeRequestData
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*NotificationRequest) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*NotificationRequest_EmailRequestData)(nil),
-		(*NotificationRequest_SmsRequestData)(nil),
-		(*NotificationRequest_RealTimeRequestData)(nil),
-	}
-}
-
 //Emailrequest contains information about the email
 type EmailRequest struct {
-	EmailType EmailRequest_EmailType `protobuf:"varint,1,opt,name=email_type,json=emailType,proto3,enum=proto.EmailRequest_EmailType" json:"email_type,omitempty"`
 	//this contains the email address of sender
 	Sender string `protobuf:"bytes,2,opt,name=sender,proto3" json:"sender,omitempty"`
 	//this is an array of strings containing the receipients email addresses
@@ -305,13 +127,6 @@ func (m *EmailRequest) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_EmailRequest proto.InternalMessageInfo
-
-func (m *EmailRequest) GetEmailType() EmailRequest_EmailType {
-	if m != nil {
-		return m.EmailType
-	}
-	return EmailRequest_MARKETING
-}
 
 func (m *EmailRequest) GetSender() string {
 	if m != nil {
@@ -442,145 +257,22 @@ func (m *SmsRequest) GetBody() string {
 	return ""
 }
 
-type RealTimeRequest struct {
-	NotificationMethod RealTimeRequest_NotificationMethod `protobuf:"varint,1,opt,name=notification_method,json=notificationMethod,proto3,enum=proto.RealTimeRequest_NotificationMethod" json:"notification_method,omitempty"`
-	//notification_request can be oneof these
-	//
-	// Types that are valid to be assigned to NotificationRequest:
-	//	*RealTimeRequest_SendRealTimeRequest
-	//	*RealTimeRequest_HistoryRequest
-	//	*RealTimeRequest_UnsubscribeRequest
-	//	*RealTimeRequest_DisconnectRequest
-	NotificationRequest  isRealTimeRequest_NotificationRequest `protobuf_oneof:"notification_request"`
-	XXX_NoUnkeyedLiteral struct{}                              `json:"-"`
-	XXX_unrecognized     []byte                                `json:"-"`
-	XXX_sizecache        int32                                 `json:"-"`
-}
-
-func (m *RealTimeRequest) Reset()         { *m = RealTimeRequest{} }
-func (m *RealTimeRequest) String() string { return proto.CompactTextString(m) }
-func (*RealTimeRequest) ProtoMessage()    {}
-func (*RealTimeRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_736a457d4a5efa07, []int{3}
-}
-
-func (m *RealTimeRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_RealTimeRequest.Unmarshal(m, b)
-}
-func (m *RealTimeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_RealTimeRequest.Marshal(b, m, deterministic)
-}
-func (m *RealTimeRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RealTimeRequest.Merge(m, src)
-}
-func (m *RealTimeRequest) XXX_Size() int {
-	return xxx_messageInfo_RealTimeRequest.Size(m)
-}
-func (m *RealTimeRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_RealTimeRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_RealTimeRequest proto.InternalMessageInfo
-
-func (m *RealTimeRequest) GetNotificationMethod() RealTimeRequest_NotificationMethod {
-	if m != nil {
-		return m.NotificationMethod
-	}
-	return RealTimeRequest_SEND_NOTIFICATION
-}
-
-type isRealTimeRequest_NotificationRequest interface {
-	isRealTimeRequest_NotificationRequest()
-}
-
-type RealTimeRequest_SendRealTimeRequest struct {
-	SendRealTimeRequest *SendRealTimeRequest `protobuf:"bytes,2,opt,name=send_real_time_request,json=sendRealTimeRequest,proto3,oneof"`
-}
-
-type RealTimeRequest_HistoryRequest struct {
-	HistoryRequest *HistoryRequest `protobuf:"bytes,3,opt,name=history_request,json=historyRequest,proto3,oneof"`
-}
-
-type RealTimeRequest_UnsubscribeRequest struct {
-	UnsubscribeRequest *UnsubscribeRequest `protobuf:"bytes,4,opt,name=unsubscribe_request,json=unsubscribeRequest,proto3,oneof"`
-}
-
-type RealTimeRequest_DisconnectRequest struct {
-	DisconnectRequest *DisconnectRequest `protobuf:"bytes,5,opt,name=disconnect_request,json=disconnectRequest,proto3,oneof"`
-}
-
-func (*RealTimeRequest_SendRealTimeRequest) isRealTimeRequest_NotificationRequest() {}
-
-func (*RealTimeRequest_HistoryRequest) isRealTimeRequest_NotificationRequest() {}
-
-func (*RealTimeRequest_UnsubscribeRequest) isRealTimeRequest_NotificationRequest() {}
-
-func (*RealTimeRequest_DisconnectRequest) isRealTimeRequest_NotificationRequest() {}
-
-func (m *RealTimeRequest) GetNotificationRequest() isRealTimeRequest_NotificationRequest {
-	if m != nil {
-		return m.NotificationRequest
-	}
-	return nil
-}
-
-func (m *RealTimeRequest) GetSendRealTimeRequest() *SendRealTimeRequest {
-	if x, ok := m.GetNotificationRequest().(*RealTimeRequest_SendRealTimeRequest); ok {
-		return x.SendRealTimeRequest
-	}
-	return nil
-}
-
-func (m *RealTimeRequest) GetHistoryRequest() *HistoryRequest {
-	if x, ok := m.GetNotificationRequest().(*RealTimeRequest_HistoryRequest); ok {
-		return x.HistoryRequest
-	}
-	return nil
-}
-
-func (m *RealTimeRequest) GetUnsubscribeRequest() *UnsubscribeRequest {
-	if x, ok := m.GetNotificationRequest().(*RealTimeRequest_UnsubscribeRequest); ok {
-		return x.UnsubscribeRequest
-	}
-	return nil
-}
-
-func (m *RealTimeRequest) GetDisconnectRequest() *DisconnectRequest {
-	if x, ok := m.GetNotificationRequest().(*RealTimeRequest_DisconnectRequest); ok {
-		return x.DisconnectRequest
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*RealTimeRequest) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*RealTimeRequest_SendRealTimeRequest)(nil),
-		(*RealTimeRequest_HistoryRequest)(nil),
-		(*RealTimeRequest_UnsubscribeRequest)(nil),
-		(*RealTimeRequest_DisconnectRequest)(nil),
-	}
-}
-
 //this conatins the data of real time notification
 type SendRealTimeRequest struct {
-	NotificationPublishingMethod SendRealTimeRequest_NotificationPublishingMethods `protobuf:"varint,1,opt,name=notification_publishing_method,json=notificationPublishingMethod,proto3,enum=proto.SendRealTimeRequest_NotificationPublishingMethods" json:"notification_publishing_method,omitempty"`
-	//publishing data , data to be published inside the channel
-	//
-	// Types that are valid to be assigned to NotificationPublishingData:
-	//	*SendRealTimeRequest_BroardcastRequest
-	//	*SendRealTimeRequest_PublishRequest
-	NotificationPublishingData isSendRealTimeRequest_NotificationPublishingData `protobuf_oneof:"notification_publishing_data"`
-	XXX_NoUnkeyedLiteral       struct{}                                         `json:"-"`
-	XXX_unrecognized           []byte                                           `json:"-"`
-	XXX_sizecache              int32                                            `json:"-"`
+	//array of channel names in which data is to be published
+	Channels []string `protobuf:"bytes,1,rep,name=channels,proto3" json:"channels,omitempty"`
+	//data to publish
+	Data                 []byte   `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *SendRealTimeRequest) Reset()         { *m = SendRealTimeRequest{} }
 func (m *SendRealTimeRequest) String() string { return proto.CompactTextString(m) }
 func (*SendRealTimeRequest) ProtoMessage()    {}
 func (*SendRealTimeRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_736a457d4a5efa07, []int{4}
+	return fileDescriptor_736a457d4a5efa07, []int{3}
 }
 
 func (m *SendRealTimeRequest) XXX_Unmarshal(b []byte) error {
@@ -601,281 +293,18 @@ func (m *SendRealTimeRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SendRealTimeRequest proto.InternalMessageInfo
 
-func (m *SendRealTimeRequest) GetNotificationPublishingMethod() SendRealTimeRequest_NotificationPublishingMethods {
-	if m != nil {
-		return m.NotificationPublishingMethod
-	}
-	return SendRealTimeRequest_BROADCAST
-}
-
-type isSendRealTimeRequest_NotificationPublishingData interface {
-	isSendRealTimeRequest_NotificationPublishingData()
-}
-
-type SendRealTimeRequest_BroardcastRequest struct {
-	BroardcastRequest *BroadcastRequest `protobuf:"bytes,2,opt,name=broardcast_request,json=broardcastRequest,proto3,oneof"`
-}
-
-type SendRealTimeRequest_PublishRequest struct {
-	PublishRequest *PublishRequest `protobuf:"bytes,3,opt,name=publish_request,json=publishRequest,proto3,oneof"`
-}
-
-func (*SendRealTimeRequest_BroardcastRequest) isSendRealTimeRequest_NotificationPublishingData() {}
-
-func (*SendRealTimeRequest_PublishRequest) isSendRealTimeRequest_NotificationPublishingData() {}
-
-func (m *SendRealTimeRequest) GetNotificationPublishingData() isSendRealTimeRequest_NotificationPublishingData {
-	if m != nil {
-		return m.NotificationPublishingData
-	}
-	return nil
-}
-
-func (m *SendRealTimeRequest) GetBroardcastRequest() *BroadcastRequest {
-	if x, ok := m.GetNotificationPublishingData().(*SendRealTimeRequest_BroardcastRequest); ok {
-		return x.BroardcastRequest
-	}
-	return nil
-}
-
-func (m *SendRealTimeRequest) GetPublishRequest() *PublishRequest {
-	if x, ok := m.GetNotificationPublishingData().(*SendRealTimeRequest_PublishRequest); ok {
-		return x.PublishRequest
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*SendRealTimeRequest) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*SendRealTimeRequest_BroardcastRequest)(nil),
-		(*SendRealTimeRequest_PublishRequest)(nil),
-	}
-}
-
-type BroadcastRequest struct {
-	//array containing names of channels
-	Channels             []string `protobuf:"bytes,1,rep,name=channels,proto3" json:"channels,omitempty"`
-	Data                 []byte   `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *BroadcastRequest) Reset()         { *m = BroadcastRequest{} }
-func (m *BroadcastRequest) String() string { return proto.CompactTextString(m) }
-func (*BroadcastRequest) ProtoMessage()    {}
-func (*BroadcastRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_736a457d4a5efa07, []int{5}
-}
-
-func (m *BroadcastRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_BroadcastRequest.Unmarshal(m, b)
-}
-func (m *BroadcastRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_BroadcastRequest.Marshal(b, m, deterministic)
-}
-func (m *BroadcastRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BroadcastRequest.Merge(m, src)
-}
-func (m *BroadcastRequest) XXX_Size() int {
-	return xxx_messageInfo_BroadcastRequest.Size(m)
-}
-func (m *BroadcastRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_BroadcastRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_BroadcastRequest proto.InternalMessageInfo
-
-func (m *BroadcastRequest) GetChannels() []string {
+func (m *SendRealTimeRequest) GetChannels() []string {
 	if m != nil {
 		return m.Channels
 	}
 	return nil
 }
 
-func (m *BroadcastRequest) GetData() []byte {
+func (m *SendRealTimeRequest) GetData() []byte {
 	if m != nil {
 		return m.Data
 	}
 	return nil
-}
-
-type PublishRequest struct {
-	//channel name
-	Channel              string   `protobuf:"bytes,1,opt,name=channel,proto3" json:"channel,omitempty"`
-	Data                 []byte   `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *PublishRequest) Reset()         { *m = PublishRequest{} }
-func (m *PublishRequest) String() string { return proto.CompactTextString(m) }
-func (*PublishRequest) ProtoMessage()    {}
-func (*PublishRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_736a457d4a5efa07, []int{6}
-}
-
-func (m *PublishRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_PublishRequest.Unmarshal(m, b)
-}
-func (m *PublishRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_PublishRequest.Marshal(b, m, deterministic)
-}
-func (m *PublishRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PublishRequest.Merge(m, src)
-}
-func (m *PublishRequest) XXX_Size() int {
-	return xxx_messageInfo_PublishRequest.Size(m)
-}
-func (m *PublishRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_PublishRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_PublishRequest proto.InternalMessageInfo
-
-func (m *PublishRequest) GetChannel() string {
-	if m != nil {
-		return m.Channel
-	}
-	return ""
-}
-
-func (m *PublishRequest) GetData() []byte {
-	if m != nil {
-		return m.Data
-	}
-	return nil
-}
-
-//this contains the channel name
-type HistoryRequest struct {
-	Channel              string   `protobuf:"bytes,1,opt,name=channel,proto3" json:"channel,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *HistoryRequest) Reset()         { *m = HistoryRequest{} }
-func (m *HistoryRequest) String() string { return proto.CompactTextString(m) }
-func (*HistoryRequest) ProtoMessage()    {}
-func (*HistoryRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_736a457d4a5efa07, []int{7}
-}
-
-func (m *HistoryRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_HistoryRequest.Unmarshal(m, b)
-}
-func (m *HistoryRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_HistoryRequest.Marshal(b, m, deterministic)
-}
-func (m *HistoryRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_HistoryRequest.Merge(m, src)
-}
-func (m *HistoryRequest) XXX_Size() int {
-	return xxx_messageInfo_HistoryRequest.Size(m)
-}
-func (m *HistoryRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_HistoryRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_HistoryRequest proto.InternalMessageInfo
-
-func (m *HistoryRequest) GetChannel() string {
-	if m != nil {
-		return m.Channel
-	}
-	return ""
-}
-
-//this contains the information to unsubscribe a user from a channel
-type UnsubscribeRequest struct {
-	//channel from which user has to unsubscribe
-	Channel              string   `protobuf:"bytes,1,opt,name=channel,proto3" json:"channel,omitempty"`
-	UserId               string   `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *UnsubscribeRequest) Reset()         { *m = UnsubscribeRequest{} }
-func (m *UnsubscribeRequest) String() string { return proto.CompactTextString(m) }
-func (*UnsubscribeRequest) ProtoMessage()    {}
-func (*UnsubscribeRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_736a457d4a5efa07, []int{8}
-}
-
-func (m *UnsubscribeRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_UnsubscribeRequest.Unmarshal(m, b)
-}
-func (m *UnsubscribeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_UnsubscribeRequest.Marshal(b, m, deterministic)
-}
-func (m *UnsubscribeRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UnsubscribeRequest.Merge(m, src)
-}
-func (m *UnsubscribeRequest) XXX_Size() int {
-	return xxx_messageInfo_UnsubscribeRequest.Size(m)
-}
-func (m *UnsubscribeRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_UnsubscribeRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_UnsubscribeRequest proto.InternalMessageInfo
-
-func (m *UnsubscribeRequest) GetChannel() string {
-	if m != nil {
-		return m.Channel
-	}
-	return ""
-}
-
-func (m *UnsubscribeRequest) GetUserId() string {
-	if m != nil {
-		return m.UserId
-	}
-	return ""
-}
-
-//Disconnect user from all connections to server
-type DisconnectRequest struct {
-	UserId               string   `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *DisconnectRequest) Reset()         { *m = DisconnectRequest{} }
-func (m *DisconnectRequest) String() string { return proto.CompactTextString(m) }
-func (*DisconnectRequest) ProtoMessage()    {}
-func (*DisconnectRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_736a457d4a5efa07, []int{9}
-}
-
-func (m *DisconnectRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_DisconnectRequest.Unmarshal(m, b)
-}
-func (m *DisconnectRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_DisconnectRequest.Marshal(b, m, deterministic)
-}
-func (m *DisconnectRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DisconnectRequest.Merge(m, src)
-}
-func (m *DisconnectRequest) XXX_Size() int {
-	return xxx_messageInfo_DisconnectRequest.Size(m)
-}
-func (m *DisconnectRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_DisconnectRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_DisconnectRequest proto.InternalMessageInfo
-
-func (m *DisconnectRequest) GetUserId() string {
-	if m != nil {
-		return m.UserId
-	}
-	return ""
 }
 
 //Response of notification
@@ -891,7 +320,7 @@ func (m *NotificationResponse) Reset()         { *m = NotificationResponse{} }
 func (m *NotificationResponse) String() string { return proto.CompactTextString(m) }
 func (*NotificationResponse) ProtoMessage()    {}
 func (*NotificationResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_736a457d4a5efa07, []int{10}
+	return fileDescriptor_736a457d4a5efa07, []int{4}
 }
 
 func (m *NotificationResponse) XXX_Unmarshal(b []byte) error {
@@ -938,7 +367,7 @@ func (m *EmailResponse) Reset()         { *m = EmailResponse{} }
 func (m *EmailResponse) String() string { return proto.CompactTextString(m) }
 func (*EmailResponse) ProtoMessage()    {}
 func (*EmailResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_736a457d4a5efa07, []int{11}
+	return fileDescriptor_736a457d4a5efa07, []int{5}
 }
 
 func (m *EmailResponse) XXX_Unmarshal(b []byte) error {
@@ -978,7 +407,7 @@ func (m *SmsResponse) Reset()         { *m = SmsResponse{} }
 func (m *SmsResponse) String() string { return proto.CompactTextString(m) }
 func (*SmsResponse) ProtoMessage()    {}
 func (*SmsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_736a457d4a5efa07, []int{12}
+	return fileDescriptor_736a457d4a5efa07, []int{6}
 }
 
 func (m *SmsResponse) XXX_Unmarshal(b []byte) error {
@@ -1006,220 +435,57 @@ func (m *SmsResponse) GetMessageId() string {
 	return ""
 }
 
-//This contains array of notifications which were published by centrifugo
-type HistoryResponse struct {
-	Notifications        []*Notification `protobuf:"bytes,1,rep,name=notifications,proto3" json:"notifications,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
-	XXX_unrecognized     []byte          `json:"-"`
-	XXX_sizecache        int32           `json:"-"`
-}
-
-func (m *HistoryResponse) Reset()         { *m = HistoryResponse{} }
-func (m *HistoryResponse) String() string { return proto.CompactTextString(m) }
-func (*HistoryResponse) ProtoMessage()    {}
-func (*HistoryResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_736a457d4a5efa07, []int{13}
-}
-
-func (m *HistoryResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_HistoryResponse.Unmarshal(m, b)
-}
-func (m *HistoryResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_HistoryResponse.Marshal(b, m, deterministic)
-}
-func (m *HistoryResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_HistoryResponse.Merge(m, src)
-}
-func (m *HistoryResponse) XXX_Size() int {
-	return xxx_messageInfo_HistoryResponse.Size(m)
-}
-func (m *HistoryResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_HistoryResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_HistoryResponse proto.InternalMessageInfo
-
-func (m *HistoryResponse) GetNotifications() []*Notification {
-	if m != nil {
-		return m.Notifications
-	}
-	return nil
-}
-
-//this contains detail of every notification
-type Notification struct {
-	//the notification uid
-	Uid string `protobuf:"bytes,1,opt,name=uid,proto3" json:"uid,omitempty"`
-	//channel in which this notification was published
-	Channel string `protobuf:"bytes,2,opt,name=channel,proto3" json:"channel,omitempty"`
-	//raw content in bytes array format json.rawMessage
-	RawData []byte `protobuf:"bytes,3,opt,name=raw_data,json=rawData,proto3" json:"raw_data,omitempty"`
-	//client name/id
-	Client               string   `protobuf:"bytes,4,opt,name=client,proto3" json:"client,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *Notification) Reset()         { *m = Notification{} }
-func (m *Notification) String() string { return proto.CompactTextString(m) }
-func (*Notification) ProtoMessage()    {}
-func (*Notification) Descriptor() ([]byte, []int) {
-	return fileDescriptor_736a457d4a5efa07, []int{14}
-}
-
-func (m *Notification) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Notification.Unmarshal(m, b)
-}
-func (m *Notification) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Notification.Marshal(b, m, deterministic)
-}
-func (m *Notification) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Notification.Merge(m, src)
-}
-func (m *Notification) XXX_Size() int {
-	return xxx_messageInfo_Notification.Size(m)
-}
-func (m *Notification) XXX_DiscardUnknown() {
-	xxx_messageInfo_Notification.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Notification proto.InternalMessageInfo
-
-func (m *Notification) GetUid() string {
-	if m != nil {
-		return m.Uid
-	}
-	return ""
-}
-
-func (m *Notification) GetChannel() string {
-	if m != nil {
-		return m.Channel
-	}
-	return ""
-}
-
-func (m *Notification) GetRawData() []byte {
-	if m != nil {
-		return m.RawData
-	}
-	return nil
-}
-
-func (m *Notification) GetClient() string {
-	if m != nil {
-		return m.Client
-	}
-	return ""
-}
-
 func init() {
-	proto.RegisterEnum("proto.NotificationRequest_NotificationName", NotificationRequest_NotificationName_name, NotificationRequest_NotificationName_value)
-	proto.RegisterEnum("proto.EmailRequest_EmailType", EmailRequest_EmailType_name, EmailRequest_EmailType_value)
-	proto.RegisterEnum("proto.RealTimeRequest_NotificationMethod", RealTimeRequest_NotificationMethod_name, RealTimeRequest_NotificationMethod_value)
-	proto.RegisterEnum("proto.SendRealTimeRequest_NotificationPublishingMethods", SendRealTimeRequest_NotificationPublishingMethods_name, SendRealTimeRequest_NotificationPublishingMethods_value)
 	proto.RegisterType((*NotificationRequest)(nil), "proto.NotificationRequest")
 	proto.RegisterType((*EmailRequest)(nil), "proto.EmailRequest")
 	proto.RegisterType((*SmsRequest)(nil), "proto.SmsRequest")
-	proto.RegisterType((*RealTimeRequest)(nil), "proto.RealTimeRequest")
 	proto.RegisterType((*SendRealTimeRequest)(nil), "proto.SendRealTimeRequest")
-	proto.RegisterType((*BroadcastRequest)(nil), "proto.BroadcastRequest")
-	proto.RegisterType((*PublishRequest)(nil), "proto.PublishRequest")
-	proto.RegisterType((*HistoryRequest)(nil), "proto.HistoryRequest")
-	proto.RegisterType((*UnsubscribeRequest)(nil), "proto.UnsubscribeRequest")
-	proto.RegisterType((*DisconnectRequest)(nil), "proto.DisconnectRequest")
 	proto.RegisterType((*NotificationResponse)(nil), "proto.NotificationResponse")
 	proto.RegisterType((*EmailResponse)(nil), "proto.EmailResponse")
 	proto.RegisterType((*SmsResponse)(nil), "proto.SmsResponse")
-	proto.RegisterType((*HistoryResponse)(nil), "proto.HistoryResponse")
-	proto.RegisterType((*Notification)(nil), "proto.Notification")
 }
 
 func init() { proto.RegisterFile("notification.proto", fileDescriptor_736a457d4a5efa07) }
 
 var fileDescriptor_736a457d4a5efa07 = []byte{
-	// 1275 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x57, 0x4d, 0x6f, 0xdb, 0x46,
-	0x13, 0xb6, 0x24, 0xdb, 0xb2, 0x46, 0x8e, 0x4c, 0xaf, 0x1c, 0x85, 0x61, 0x12, 0xc3, 0x2f, 0x4f,
-	0x7e, 0x8b, 0xc0, 0x01, 0xdc, 0x16, 0x48, 0x11, 0x34, 0x08, 0xf5, 0xd1, 0x88, 0x8d, 0x25, 0xa7,
-	0x24, 0x85, 0x24, 0xbd, 0x08, 0x14, 0xb9, 0xb1, 0xd8, 0x8a, 0xa4, 0xca, 0x5d, 0x21, 0xd1, 0xa5,
-	0xe7, 0x9e, 0x7a, 0xef, 0x3f, 0xe8, 0xaf, 0xea, 0xb9, 0xbf, 0xa2, 0x28, 0xf6, 0x43, 0x12, 0x29,
-	0x51, 0x46, 0x9a, 0x93, 0xb8, 0xcf, 0xcc, 0x3c, 0xbb, 0xf3, 0xb5, 0x3b, 0x02, 0x14, 0xc5, 0x34,
-	0x78, 0x1f, 0x78, 0x2e, 0x0d, 0xe2, 0xe8, 0x62, 0x9a, 0xc4, 0x34, 0x46, 0x7b, 0xfc, 0x47, 0xbb,
-	0x7f, 0x13, 0xc7, 0x37, 0x13, 0xfc, 0x84, 0xaf, 0x46, 0xb3, 0xf7, 0x4f, 0xdc, 0x68, 0x2e, 0x34,
-	0xb4, 0x07, 0xeb, 0x22, 0x1c, 0x4e, 0xa9, 0x14, 0xea, 0xbf, 0x95, 0xa0, 0xde, 0x4f, 0xb1, 0x5a,
-	0xf8, 0x97, 0x19, 0x26, 0x14, 0xbd, 0x83, 0xe3, 0xf4, 0x66, 0xc3, 0xc8, 0x0d, 0xb1, 0x5a, 0x38,
-	0x2b, 0x9c, 0xd7, 0x2e, 0x1f, 0x0b, 0xd3, 0x8b, 0x1c, 0xb3, 0x0c, 0xc6, 0x6d, 0x2c, 0x25, 0x4d,
-	0xd3, 0x77, 0x43, 0x8c, 0x0c, 0x50, 0x3a, 0xa1, 0x1b, 0x4c, 0xa4, 0x4d, 0xdb, 0xa5, 0xae, 0x5a,
-	0x3c, 0x2b, 0x9c, 0x57, 0x2f, 0xeb, 0x92, 0x39, 0x2d, 0xee, 0xee, 0x58, 0x0a, 0x5e, 0x53, 0x47,
-	0xcf, 0xa0, 0x66, 0x87, 0x24, 0x4d, 0x50, 0xe2, 0x04, 0xc7, 0x92, 0x60, 0x25, 0xec, 0xee, 0x58,
-	0x35, 0x92, 0x51, 0x45, 0xdf, 0x43, 0xdd, 0xc2, 0xee, 0xc4, 0x09, 0x42, 0x9c, 0x66, 0xd8, 0xe5,
-	0x0c, 0x0d, 0xc9, 0xb0, 0xa6, 0xd1, 0xdd, 0xb1, 0xea, 0xc9, 0xa6, 0x91, 0xfe, 0x35, 0x1c, 0x6f,
-	0xb8, 0x8c, 0x2a, 0xb0, 0xd7, 0xe9, 0x19, 0xe6, 0x95, 0xb2, 0x83, 0xca, 0x50, 0xb2, 0x7b, 0xb6,
-	0x52, 0x40, 0x87, 0x70, 0x60, 0x75, 0x8c, 0x2b, 0xc7, 0xec, 0x75, 0x94, 0x62, 0xb3, 0xbe, 0x16,
-	0x5d, 0x9f, 0x71, 0xfd, 0x51, 0x82, 0xc3, 0xb4, 0xe7, 0xe8, 0x5b, 0x00, 0xee, 0xf9, 0x90, 0xce,
-	0xa7, 0x8b, 0xe0, 0x9f, 0xe6, 0x84, 0x48, 0x2c, 0xb8, 0x96, 0x55, 0xe1, 0x16, 0xce, 0x7c, 0x8a,
-	0x51, 0x03, 0xf6, 0x09, 0x8e, 0x7c, 0x9c, 0xf0, 0xe8, 0x56, 0x2c, 0xb9, 0x42, 0xa7, 0x00, 0x09,
-	0xf6, 0x70, 0x30, 0x0d, 0x70, 0x44, 0xd5, 0xd2, 0x59, 0xe9, 0xbc, 0x62, 0xa5, 0x10, 0x54, 0x83,
-	0xa2, 0xe7, 0xa9, 0xbb, 0x1c, 0x2f, 0x7a, 0x1e, 0x52, 0xa0, 0x34, 0xf2, 0x3c, 0x75, 0x8f, 0x03,
-	0xec, 0x13, 0x3d, 0x80, 0xca, 0x98, 0x86, 0x93, 0xe1, 0x28, 0xf6, 0xe7, 0xea, 0x3e, 0x27, 0x3f,
-	0x60, 0x40, 0x33, 0xf6, 0xe7, 0x4c, 0x48, 0xf1, 0x47, 0x2a, 0x84, 0x65, 0x21, 0x64, 0x00, 0x17,
-	0xaa, 0x50, 0x26, 0xb3, 0xd1, 0x4f, 0xd8, 0xa3, 0xea, 0x01, 0x17, 0x2d, 0x96, 0xcc, 0xec, 0x7d,
-	0x30, 0xc1, 0xa2, 0xd0, 0x2a, 0xc2, 0x8c, 0x01, 0xbc, 0x64, 0x54, 0x28, 0x7b, 0x63, 0x37, 0x21,
-	0x98, 0xaa, 0x20, 0xcc, 0xe4, 0x72, 0x69, 0xc6, 0x22, 0xa8, 0x56, 0xcf, 0x0a, 0xe7, 0x87, 0xc2,
-	0x8c, 0x67, 0xa7, 0x0b, 0xb0, 0x0a, 0x0d, 0xba, 0x03, 0x95, 0x9e, 0x61, 0xbd, 0xea, 0x38, 0x66,
-	0xff, 0xa5, 0xb2, 0x83, 0xea, 0x70, 0xf4, 0xc6, 0x74, 0xba, 0x43, 0xc3, 0x71, 0x8c, 0x56, 0xb7,
-	0xd7, 0xe9, 0x3b, 0x4a, 0x01, 0x35, 0x00, 0x31, 0xf0, 0x7a, 0xe0, 0xa4, 0xf1, 0xa2, 0xfe, 0x16,
-	0x60, 0x55, 0x53, 0xa9, 0xc8, 0x16, 0x6e, 0x89, 0x6c, 0x71, 0x23, 0xb2, 0x08, 0x76, 0x79, 0x54,
-	0x4a, 0xdc, 0x8a, 0x7f, 0xeb, 0xbf, 0xef, 0xc2, 0xd1, 0x5a, 0xb1, 0xa1, 0x1f, 0xa1, 0x9e, 0x29,
-	0x8f, 0x10, 0xd3, 0x71, 0xec, 0xcb, 0x0a, 0xf8, 0x7f, 0x7e, 0x85, 0x66, 0x5a, 0xaf, 0xc7, 0x0d,
-	0xac, 0xcc, 0x7d, 0x21, 0x30, 0xf4, 0x03, 0x34, 0xd8, 0x69, 0x87, 0xac, 0x9a, 0x87, 0x34, 0x08,
-	0xf1, 0x30, 0x11, 0x04, 0xb2, 0x07, 0xb5, 0x45, 0x0b, 0xe1, 0xc8, 0xcf, 0x69, 0x02, 0xb2, 0x09,
-	0xa3, 0x17, 0x70, 0x34, 0x0e, 0x08, 0x8d, 0x93, 0xf9, 0x92, 0x4b, 0xb4, 0xe3, 0x5d, 0xc9, 0xd5,
-	0x15, 0xd2, 0x54, 0x4b, 0x8e, 0x33, 0x08, 0xba, 0x82, 0xfa, 0x2c, 0x22, 0xb3, 0x11, 0xf1, 0x92,
-	0x60, 0xb4, 0x3a, 0x91, 0x68, 0xc9, 0xfb, 0x92, 0x65, 0xb0, 0xd2, 0x58, 0x31, 0xa1, 0xd9, 0x06,
-	0x8a, 0x4c, 0x40, 0x7e, 0x40, 0xbc, 0x38, 0x8a, 0xb0, 0x47, 0x97, 0x64, 0x7b, 0x9c, 0x4c, 0x95,
-	0x64, 0xed, 0xa5, 0xc2, 0x8a, 0xeb, 0xd8, 0x5f, 0x07, 0xf5, 0x77, 0x80, 0x36, 0xe3, 0x8a, 0xee,
-	0xc2, 0xb1, 0xdd, 0xe9, 0xb7, 0x87, 0xfd, 0x6b, 0xc7, 0xfc, 0xce, 0x6c, 0x19, 0x8e, 0x79, 0xdd,
-	0x57, 0x76, 0x50, 0x15, 0xca, 0x5d, 0xd3, 0x76, 0xae, 0xad, 0x77, 0x4a, 0x01, 0x1d, 0x41, 0x75,
-	0xd0, 0xb7, 0x07, 0x4d, 0xbb, 0x65, 0x99, 0xcd, 0x8e, 0x52, 0x44, 0x35, 0x80, 0xb6, 0x69, 0xb7,
-	0xae, 0xfb, 0xfd, 0x4e, 0xcb, 0x51, 0x4a, 0xcd, 0x06, 0x9c, 0x64, 0x92, 0x2c, 0xcf, 0xa9, 0xff,
-	0x53, 0x84, 0x7a, 0x4e, 0xf0, 0xd1, 0xaf, 0x70, 0x9a, 0xd1, 0x9f, 0xce, 0x46, 0x93, 0x80, 0x8c,
-	0x83, 0xe8, 0x26, 0x5b, 0x1f, 0x4f, 0xb7, 0x27, 0x30, 0x53, 0x23, 0xaf, 0x97, 0xf6, 0xc2, 0x2b,
-	0x62, 0x3d, 0x8c, 0x6e, 0x11, 0xa3, 0x2e, 0xa0, 0x51, 0x12, 0xbb, 0x89, 0xef, 0xb9, 0x84, 0xae,
-	0x15, 0xcd, 0x3d, 0xb9, 0x67, 0x33, 0x89, 0x5d, 0x2e, 0x4f, 0x05, 0x75, 0x65, 0x94, 0xaa, 0x17,
-	0x79, 0xf8, 0x2d, 0xf5, 0x22, 0xf7, 0x4e, 0xd5, 0xcb, 0x34, 0x83, 0xe8, 0xcf, 0xe0, 0xd1, 0xad,
-	0xae, 0xb0, 0x5e, 0x6f, 0x5a, 0xd7, 0x46, 0xbb, 0x65, 0xd8, 0x8e, 0xc8, 0xcc, 0xeb, 0x41, 0xf3,
-	0xca, 0xb4, 0xbb, 0x4a, 0xa1, 0x79, 0x0a, 0x0f, 0xb7, 0x05, 0x92, 0xdf, 0xc3, 0x4d, 0x50, 0xd6,
-	0xfd, 0x40, 0x1a, 0x1c, 0x78, 0x63, 0x37, 0x8a, 0xf0, 0x84, 0xa8, 0x05, 0xde, 0xd7, 0xcb, 0x35,
-	0xeb, 0x6a, 0x7f, 0xf1, 0x86, 0x1d, 0x5a, 0xfc, 0x5b, 0x7f, 0x0e, 0xb5, 0xac, 0x13, 0xf2, 0x0a,
-	0x63, 0x16, 0xf2, 0xd2, 0x58, 0x2c, 0x73, 0xed, 0xbf, 0x80, 0x5a, 0xb6, 0x69, 0xb6, 0xdb, 0xeb,
-	0x2f, 0x01, 0x6d, 0xb6, 0xc6, 0x2d, 0xfb, 0xdd, 0x83, 0xf2, 0x8c, 0xe0, 0x64, 0x18, 0xf8, 0x8b,
-	0x87, 0x81, 0x2d, 0x4d, 0x5f, 0x7f, 0x0c, 0xc7, 0x1b, 0x6d, 0x91, 0xd6, 0x2e, 0x65, 0xb4, 0xdf,
-	0xc2, 0x49, 0x76, 0x02, 0x20, 0xd3, 0x38, 0x22, 0x18, 0xfd, 0x0f, 0x0e, 0x71, 0x92, 0xc4, 0xc9,
-	0x90, 0x50, 0x97, 0xce, 0x88, 0xdc, 0xbd, 0xca, 0x31, 0x9b, 0x43, 0xe8, 0x11, 0x80, 0x50, 0xf1,
-	0x62, 0x1f, 0xf3, 0x43, 0xec, 0x59, 0x15, 0x8e, 0xb4, 0x62, 0x1f, 0xeb, 0x17, 0x70, 0x47, 0x3e,
-	0x6f, 0x92, 0xf2, 0x11, 0x40, 0x88, 0x09, 0x71, 0x6f, 0x30, 0x3b, 0x86, 0x20, 0xac, 0x48, 0x84,
-	0x9f, 0xbb, 0xca, 0x2f, 0xe7, 0x4f, 0xd3, 0xbe, 0x82, 0xa3, 0x65, 0x68, 0xa5, 0xc5, 0x37, 0x70,
-	0x27, 0x5d, 0x11, 0x22, 0xc5, 0xab, 0x71, 0x24, 0xe3, 0x66, 0x56, 0x53, 0x0f, 0xe1, 0x30, 0x2d,
-	0x66, 0x8f, 0xe5, 0x6c, 0xb9, 0x2b, 0xfb, 0x4c, 0x27, 0xa2, 0x98, 0x4d, 0xc4, 0x7d, 0x38, 0x48,
-	0xdc, 0x0f, 0xe2, 0xe9, 0x2a, 0xf1, 0xe4, 0x97, 0x13, 0xf7, 0x03, 0x9f, 0x51, 0x1a, 0xb0, 0xef,
-	0x4d, 0xf8, 0x2b, 0xb2, 0x2b, 0x82, 0x2e, 0x56, 0x97, 0x03, 0xd8, 0xe7, 0xdb, 0xcd, 0xd1, 0x2b,
-	0x50, 0x58, 0x87, 0x67, 0x36, 0xd7, 0xb6, 0x4f, 0x66, 0xda, 0x83, 0x5c, 0x99, 0x08, 0xc0, 0xe5,
-	0xdf, 0x85, 0xdc, 0x7b, 0xae, 0x0d, 0x15, 0xb6, 0x07, 0x4f, 0xc6, 0x67, 0x93, 0xa3, 0x26, 0x94,
-	0x19, 0x8b, 0x1d, 0x92, 0xcf, 0xe7, 0xe8, 0xc2, 0xc9, 0xe2, 0x2e, 0xfb, 0x64, 0x8f, 0x4f, 0x2e,
-	0xc4, 0xe0, 0x7b, 0xb1, 0x18, 0x7c, 0x2f, 0x8c, 0x68, 0x7e, 0xf9, 0x57, 0x01, 0xaa, 0xdc, 0x21,
-	0x5b, 0xbc, 0xd9, 0x2f, 0xc4, 0x6d, 0xdb, 0x73, 0x93, 0x9f, 0x31, 0x0d, 0xa2, 0x1b, 0x2e, 0x23,
-	0x28, 0x6f, 0x14, 0xd5, 0x4e, 0xb2, 0xa0, 0x3c, 0x5b, 0x1b, 0xee, 0x2d, 0xa3, 0xf4, 0x26, 0xa0,
-	0x63, 0x83, 0x52, 0xd7, 0x1b, 0x87, 0xec, 0xc1, 0xff, 0x0f, 0x2c, 0x2f, 0x41, 0xcb, 0xb0, 0xc4,
-	0x33, 0xfa, 0x59, 0x44, 0x97, 0x06, 0x54, 0xec, 0x90, 0x48, 0xef, 0xbe, 0x82, 0x2a, 0xfb, 0x72,
-	0xf0, 0x47, 0xca, 0xe2, 0xbf, 0x39, 0x1f, 0x6b, 0x28, 0x0d, 0x49, 0x8a, 0x3f, 0x8b, 0xa0, 0xe5,
-	0x85, 0x5b, 0x96, 0x45, 0x1f, 0xd4, 0xf4, 0xe3, 0x92, 0x9b, 0x90, 0x9c, 0xd7, 0x47, 0x6b, 0x6c,
-	0x24, 0xa4, 0xc3, 0xfe, 0x89, 0xa0, 0xa7, 0x50, 0x96, 0x1d, 0x89, 0xf2, 0x27, 0x06, 0xad, 0xb1,
-	0x0e, 0xcb, 0xa0, 0xbd, 0x80, 0x6a, 0xea, 0xea, 0x43, 0xdb, 0x27, 0x85, 0xad, 0x7b, 0x3f, 0x07,
-	0x58, 0xdd, 0x79, 0x68, 0xeb, 0x74, 0xb0, 0xcd, 0x7e, 0xb4, 0xcf, 0xd7, 0x5f, 0xfe, 0x1b, 0x00,
-	0x00, 0xff, 0xff, 0x1a, 0xe1, 0x4d, 0xc7, 0x9b, 0x0d, 0x00, 0x00,
+	// 592 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x54, 0xcd, 0x4f, 0xdb, 0x4e,
+	0x10, 0x95, 0x1d, 0xbe, 0x3c, 0xc9, 0x8f, 0x1f, 0x2c, 0x08, 0x6d, 0x8d, 0xa8, 0x52, 0x5f, 0x9a,
+	0x43, 0x65, 0xaa, 0xf4, 0xd0, 0x53, 0x0f, 0xd0, 0x52, 0x09, 0x09, 0x21, 0xd5, 0xe6, 0xc0, 0x2d,
+	0xda, 0xac, 0x07, 0x70, 0x65, 0x7b, 0x53, 0xef, 0x46, 0x6a, 0x8e, 0x3d, 0xf4, 0xde, 0x3f, 0xb9,
+	0xda, 0x0f, 0x07, 0x9b, 0x44, 0xa8, 0x6a, 0x4f, 0x99, 0x79, 0x6f, 0xe6, 0x8d, 0x67, 0x76, 0x26,
+	0x40, 0x2a, 0xa1, 0xf2, 0xbb, 0x9c, 0x33, 0x95, 0x8b, 0x2a, 0x9e, 0xd5, 0x42, 0x09, 0xb2, 0x69,
+	0x7e, 0xc2, 0x17, 0xf7, 0x42, 0xdc, 0x17, 0x78, 0x6a, 0xbc, 0xe9, 0xfc, 0xee, 0x94, 0x55, 0x0b,
+	0x1b, 0x11, 0x1e, 0x3f, 0xa5, 0xb0, 0x9c, 0x29, 0x47, 0x46, 0x3f, 0x3c, 0x38, 0xb8, 0x6e, 0xa9,
+	0x26, 0xf8, 0x6d, 0x8e, 0x52, 0x91, 0xd7, 0xf0, 0x7f, 0xbb, 0xd8, 0x24, 0xcf, 0xa8, 0x37, 0xf4,
+	0x46, 0x41, 0xb2, 0xdb, 0x86, 0x2f, 0x33, 0x72, 0x06, 0xfb, 0x9d, 0xc0, 0x8c, 0x29, 0x46, 0xfd,
+	0xa1, 0x37, 0xea, 0x8f, 0x0f, 0x63, 0x5b, 0x39, 0x6e, 0x2a, 0xc7, 0x67, 0xd5, 0x22, 0xd9, 0x6b,
+	0x87, 0x7f, 0x62, 0x8a, 0x45, 0xbf, 0x7c, 0x18, 0x5c, 0x94, 0x2c, 0x2f, 0x9a, 0xe2, 0x47, 0xb0,
+	0x25, 0xb1, 0xca, 0xb0, 0x36, 0x42, 0x41, 0xe2, 0x3c, 0xf2, 0x12, 0xa0, 0x46, 0x8e, 0xf9, 0x2c,
+	0xc7, 0x4a, 0xd1, 0xde, 0xb0, 0x37, 0x0a, 0x92, 0x16, 0x42, 0x76, 0xc1, 0xe7, 0x9c, 0x6e, 0x18,
+	0xdc, 0xe7, 0x9c, 0xec, 0x41, 0x6f, 0xca, 0x39, 0xdd, 0x34, 0x80, 0x36, 0xc9, 0x31, 0x04, 0x0f,
+	0xaa, 0x2c, 0x26, 0x53, 0x91, 0x2d, 0xe8, 0x96, 0x11, 0xdf, 0xd1, 0xc0, 0xb9, 0xc8, 0x16, 0x9a,
+	0x54, 0xf8, 0x5d, 0x59, 0x72, 0xdb, 0x92, 0x1a, 0x30, 0x24, 0x85, 0x6d, 0x39, 0x9f, 0x7e, 0x45,
+	0xae, 0xe8, 0x8e, 0xa1, 0x1a, 0x57, 0xa7, 0xdd, 0xe5, 0x05, 0x4e, 0x2a, 0x56, 0x22, 0x0d, 0x6c,
+	0x9a, 0x06, 0xae, 0x59, 0x89, 0x3a, 0x8d, 0x3f, 0xb0, 0x5a, 0xa2, 0xa2, 0x60, 0xd3, 0x9c, 0xbb,
+	0x4c, 0x33, 0x03, 0xeb, 0x0f, 0xbd, 0xd1, 0xc0, 0xa6, 0x99, 0x91, 0xdc, 0x02, 0xa4, 0xa5, 0x5c,
+	0x9d, 0x87, 0xf7, 0xcc, 0x3c, 0xfc, 0x95, 0x79, 0x10, 0xd8, 0x30, 0xbd, 0xf4, 0x4c, 0x96, 0xb1,
+	0xa3, 0x0b, 0x38, 0x48, 0xb1, 0xca, 0x12, 0x64, 0xc5, 0x4d, 0x5e, 0x62, 0x53, 0x22, 0x84, 0x1d,
+	0xfe, 0xc0, 0xaa, 0x0a, 0x0b, 0x49, 0x3d, 0x23, 0xb4, 0xf4, 0xb5, 0xcc, 0xf2, 0x55, 0x07, 0x89,
+	0xb1, 0xa3, 0x5b, 0x38, 0xec, 0xae, 0x8d, 0x9c, 0x89, 0x4a, 0x22, 0x79, 0x05, 0x03, 0xac, 0x6b,
+	0x51, 0x4f, 0xa4, 0x62, 0x6a, 0x2e, 0xdd, 0x07, 0xf7, 0x0d, 0x96, 0x1a, 0x88, 0x9c, 0x00, 0xd8,
+	0x10, 0x2e, 0x32, 0x34, 0xa2, 0x9b, 0x49, 0x60, 0x90, 0x8f, 0x22, 0xc3, 0x28, 0x86, 0xff, 0xdc,
+	0x32, 0x38, 0xc9, 0x13, 0x80, 0x12, 0xa5, 0x64, 0xf7, 0xf8, 0xb8, 0x85, 0x81, 0x43, 0x2e, 0xb3,
+	0xe8, 0x0d, 0xf4, 0xcd, 0xa8, 0xfe, 0x28, 0x7a, 0xcc, 0xbb, 0xeb, 0x2e, 0x53, 0x3b, 0xc9, 0x2b,
+	0xd8, 0xd7, 0x56, 0x87, 0x22, 0xa1, 0x5d, 0xdc, 0x78, 0xcd, 0x7d, 0x84, 0xc7, 0x6b, 0x39, 0xfb,
+	0x0d, 0xe3, 0x9f, 0x3e, 0x90, 0x8e, 0xd4, 0xcd, 0x62, 0x86, 0x92, 0x7c, 0x81, 0xa3, 0xa7, 0x45,
+	0x4c, 0xa7, 0x7f, 0x5f, 0x89, 0x5c, 0xdb, 0xd7, 0x6c, 0x73, 0x69, 0xf9, 0x0f, 0x7a, 0x57, 0x40,
+	0x9f, 0xea, 0x35, 0x9b, 0xf2, 0xac, 0xe8, 0xda, 0x53, 0x1f, 0x7f, 0x86, 0xbe, 0x69, 0xd0, 0x0d,
+	0xf9, 0x3d, 0x80, 0xb6, 0x5c, 0xcf, 0x07, 0x4e, 0xae, 0x7d, 0xf9, 0xe1, 0x61, 0x17, 0x74, 0xf3,
+	0xfc, 0x00, 0x41, 0x5a, 0x36, 0x4f, 0xf5, 0x16, 0xb6, 0xb5, 0xa5, 0xdb, 0xdc, 0x77, 0xd1, 0x8f,
+	0xa7, 0x12, 0x92, 0x36, 0xe4, 0xd2, 0x6f, 0x60, 0xb7, 0x69, 0xc2, 0x69, 0x9c, 0xc3, 0xa0, 0x7d,
+	0x04, 0xcb, 0xd6, 0xd6, 0x5c, 0x46, 0x78, 0xb4, 0xd2, 0xda, 0x85, 0xfe, 0xff, 0x9c, 0x6e, 0x19,
+	0xff, 0xdd, 0xef, 0x00, 0x00, 0x00, 0xff, 0xff, 0x3e, 0x23, 0x40, 0xa0, 0x95, 0x05, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1230,202 +496,202 @@ var _ grpc.ClientConn
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
 
-// NotifyClient is the client API for Notify service.
+// NotificationsSenderClient is the client API for NotificationsSender service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type NotifyClient interface {
+type NotificationsSenderClient interface {
 	//method to fan out notifications to all notification types
-	SendNotification(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*NotificationResponse, error)
+	SendNotifications(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*NotificationResponse, error)
 }
 
-type notifyClient struct {
+type notificationsSenderClient struct {
 	cc *grpc.ClientConn
 }
 
-func NewNotifyClient(cc *grpc.ClientConn) NotifyClient {
-	return &notifyClient{cc}
+func NewNotificationsSenderClient(cc *grpc.ClientConn) NotificationsSenderClient {
+	return &notificationsSenderClient{cc}
 }
 
-func (c *notifyClient) SendNotification(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*NotificationResponse, error) {
+func (c *notificationsSenderClient) SendNotifications(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*NotificationResponse, error) {
 	out := new(NotificationResponse)
-	err := c.cc.Invoke(ctx, "/proto.Notify/SendNotification", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.NotificationsSender/SendNotifications", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// NotifyServer is the server API for Notify service.
-type NotifyServer interface {
+// NotificationsSenderServer is the server API for NotificationsSender service.
+type NotificationsSenderServer interface {
 	//method to fan out notifications to all notification types
-	SendNotification(context.Context, *NotificationRequest) (*NotificationResponse, error)
+	SendNotifications(context.Context, *NotificationRequest) (*NotificationResponse, error)
 }
 
-func RegisterNotifyServer(s *grpc.Server, srv NotifyServer) {
-	s.RegisterService(&_Notify_serviceDesc, srv)
+func RegisterNotificationsSenderServer(s *grpc.Server, srv NotificationsSenderServer) {
+	s.RegisterService(&_NotificationsSender_serviceDesc, srv)
 }
 
-func _Notify_SendNotification_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _NotificationsSender_SendNotifications_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(NotificationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(NotifyServer).SendNotification(ctx, in)
+		return srv.(NotificationsSenderServer).SendNotifications(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.Notify/SendNotification",
+		FullMethod: "/proto.NotificationsSender/SendNotifications",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NotifyServer).SendNotification(ctx, req.(*NotificationRequest))
+		return srv.(NotificationsSenderServer).SendNotifications(ctx, req.(*NotificationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-var _Notify_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.Notify",
-	HandlerType: (*NotifyServer)(nil),
+var _NotificationsSender_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "proto.NotificationsSender",
+	HandlerType: (*NotificationsSenderServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SendNotification",
-			Handler:    _Notify_SendNotification_Handler,
+			MethodName: "SendNotifications",
+			Handler:    _NotificationsSender_SendNotifications_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "notification.proto",
 }
 
-// NotificationMethodClient is the client API for NotificationMethod service.
+// NotificationsTypesClient is the client API for NotificationsTypes service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type NotificationMethodClient interface {
+type NotificationsTypesClient interface {
 	//method to send emails
-	SendEmail(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*NotificationResponse, error)
+	SendNotificationEmails(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*NotificationResponse, error)
 	//method to send sms
-	SendSms(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*NotificationResponse, error)
+	SendNotificationSms(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*NotificationResponse, error)
 	//send real time notifications, get history of realTimeNotifications
-	RealTimeNotification(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*any.Any, error)
+	SendNotificationRealTime(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*any.Any, error)
 }
 
-type notificationMethodClient struct {
+type notificationsTypesClient struct {
 	cc *grpc.ClientConn
 }
 
-func NewNotificationMethodClient(cc *grpc.ClientConn) NotificationMethodClient {
-	return &notificationMethodClient{cc}
+func NewNotificationsTypesClient(cc *grpc.ClientConn) NotificationsTypesClient {
+	return &notificationsTypesClient{cc}
 }
 
-func (c *notificationMethodClient) SendEmail(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*NotificationResponse, error) {
+func (c *notificationsTypesClient) SendNotificationEmails(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*NotificationResponse, error) {
 	out := new(NotificationResponse)
-	err := c.cc.Invoke(ctx, "/proto.NotificationMethod/SendEmail", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.NotificationsTypes/SendNotificationEmails", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *notificationMethodClient) SendSms(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*NotificationResponse, error) {
+func (c *notificationsTypesClient) SendNotificationSms(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*NotificationResponse, error) {
 	out := new(NotificationResponse)
-	err := c.cc.Invoke(ctx, "/proto.NotificationMethod/SendSms", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.NotificationsTypes/SendNotificationSms", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *notificationMethodClient) RealTimeNotification(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*any.Any, error) {
+func (c *notificationsTypesClient) SendNotificationRealTime(ctx context.Context, in *NotificationRequest, opts ...grpc.CallOption) (*any.Any, error) {
 	out := new(any.Any)
-	err := c.cc.Invoke(ctx, "/proto.NotificationMethod/RealTimeNotification", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.NotificationsTypes/SendNotificationRealTime", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// NotificationMethodServer is the server API for NotificationMethod service.
-type NotificationMethodServer interface {
+// NotificationsTypesServer is the server API for NotificationsTypes service.
+type NotificationsTypesServer interface {
 	//method to send emails
-	SendEmail(context.Context, *NotificationRequest) (*NotificationResponse, error)
+	SendNotificationEmails(context.Context, *NotificationRequest) (*NotificationResponse, error)
 	//method to send sms
-	SendSms(context.Context, *NotificationRequest) (*NotificationResponse, error)
+	SendNotificationSms(context.Context, *NotificationRequest) (*NotificationResponse, error)
 	//send real time notifications, get history of realTimeNotifications
-	RealTimeNotification(context.Context, *NotificationRequest) (*any.Any, error)
+	SendNotificationRealTime(context.Context, *NotificationRequest) (*any.Any, error)
 }
 
-func RegisterNotificationMethodServer(s *grpc.Server, srv NotificationMethodServer) {
-	s.RegisterService(&_NotificationMethod_serviceDesc, srv)
+func RegisterNotificationsTypesServer(s *grpc.Server, srv NotificationsTypesServer) {
+	s.RegisterService(&_NotificationsTypes_serviceDesc, srv)
 }
 
-func _NotificationMethod_SendEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _NotificationsTypes_SendNotificationEmails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(NotificationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(NotificationMethodServer).SendEmail(ctx, in)
+		return srv.(NotificationsTypesServer).SendNotificationEmails(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.NotificationMethod/SendEmail",
+		FullMethod: "/proto.NotificationsTypes/SendNotificationEmails",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NotificationMethodServer).SendEmail(ctx, req.(*NotificationRequest))
+		return srv.(NotificationsTypesServer).SendNotificationEmails(ctx, req.(*NotificationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _NotificationMethod_SendSms_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _NotificationsTypes_SendNotificationSms_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(NotificationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(NotificationMethodServer).SendSms(ctx, in)
+		return srv.(NotificationsTypesServer).SendNotificationSms(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.NotificationMethod/SendSms",
+		FullMethod: "/proto.NotificationsTypes/SendNotificationSms",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NotificationMethodServer).SendSms(ctx, req.(*NotificationRequest))
+		return srv.(NotificationsTypesServer).SendNotificationSms(ctx, req.(*NotificationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _NotificationMethod_RealTimeNotification_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _NotificationsTypes_SendNotificationRealTime_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(NotificationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(NotificationMethodServer).RealTimeNotification(ctx, in)
+		return srv.(NotificationsTypesServer).SendNotificationRealTime(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.NotificationMethod/RealTimeNotification",
+		FullMethod: "/proto.NotificationsTypes/SendNotificationRealTime",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NotificationMethodServer).RealTimeNotification(ctx, req.(*NotificationRequest))
+		return srv.(NotificationsTypesServer).SendNotificationRealTime(ctx, req.(*NotificationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-var _NotificationMethod_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.NotificationMethod",
-	HandlerType: (*NotificationMethodServer)(nil),
+var _NotificationsTypes_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "proto.NotificationsTypes",
+	HandlerType: (*NotificationsTypesServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SendEmail",
-			Handler:    _NotificationMethod_SendEmail_Handler,
+			MethodName: "SendNotificationEmails",
+			Handler:    _NotificationsTypes_SendNotificationEmails_Handler,
 		},
 		{
-			MethodName: "SendSms",
-			Handler:    _NotificationMethod_SendSms_Handler,
+			MethodName: "SendNotificationSms",
+			Handler:    _NotificationsTypes_SendNotificationSms_Handler,
 		},
 		{
-			MethodName: "RealTimeNotification",
-			Handler:    _NotificationMethod_RealTimeNotification_Handler,
+			MethodName: "SendNotificationRealTime",
+			Handler:    _NotificationsTypes_SendNotificationRealTime_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1436,12 +702,8 @@ var _NotificationMethod_serviceDesc = grpc.ServiceDesc{
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type EmailSenderClient interface {
-	//send bulk marketing emails
-	SendMarketingEmails(ctx context.Context, in *EmailRequest, opts ...grpc.CallOption) (*EmailResponse, error)
-	//send email with attachments
-	SendEmailWithAttachment(ctx context.Context, in *EmailRequest, opts ...grpc.CallOption) (*EmailResponse, error)
-	//send emails without attachments
-	SendEmailWithoutAttachment(ctx context.Context, in *EmailRequest, opts ...grpc.CallOption) (*EmailResponse, error)
+	//this sends email to all receipients
+	SendEmails(ctx context.Context, in *EmailRequest, opts ...grpc.CallOption) (*EmailResponse, error)
 }
 
 type emailSenderClient struct {
@@ -1452,27 +714,9 @@ func NewEmailSenderClient(cc *grpc.ClientConn) EmailSenderClient {
 	return &emailSenderClient{cc}
 }
 
-func (c *emailSenderClient) SendMarketingEmails(ctx context.Context, in *EmailRequest, opts ...grpc.CallOption) (*EmailResponse, error) {
+func (c *emailSenderClient) SendEmails(ctx context.Context, in *EmailRequest, opts ...grpc.CallOption) (*EmailResponse, error) {
 	out := new(EmailResponse)
-	err := c.cc.Invoke(ctx, "/proto.EmailSender/SendMarketingEmails", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *emailSenderClient) SendEmailWithAttachment(ctx context.Context, in *EmailRequest, opts ...grpc.CallOption) (*EmailResponse, error) {
-	out := new(EmailResponse)
-	err := c.cc.Invoke(ctx, "/proto.EmailSender/SendEmailWithAttachment", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *emailSenderClient) SendEmailWithoutAttachment(ctx context.Context, in *EmailRequest, opts ...grpc.CallOption) (*EmailResponse, error) {
-	out := new(EmailResponse)
-	err := c.cc.Invoke(ctx, "/proto.EmailSender/SendEmailWithoutAttachment", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.EmailSender/SendEmails", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1481,68 +725,28 @@ func (c *emailSenderClient) SendEmailWithoutAttachment(ctx context.Context, in *
 
 // EmailSenderServer is the server API for EmailSender service.
 type EmailSenderServer interface {
-	//send bulk marketing emails
-	SendMarketingEmails(context.Context, *EmailRequest) (*EmailResponse, error)
-	//send email with attachments
-	SendEmailWithAttachment(context.Context, *EmailRequest) (*EmailResponse, error)
-	//send emails without attachments
-	SendEmailWithoutAttachment(context.Context, *EmailRequest) (*EmailResponse, error)
+	//this sends email to all receipients
+	SendEmails(context.Context, *EmailRequest) (*EmailResponse, error)
 }
 
 func RegisterEmailSenderServer(s *grpc.Server, srv EmailSenderServer) {
 	s.RegisterService(&_EmailSender_serviceDesc, srv)
 }
 
-func _EmailSender_SendMarketingEmails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _EmailSender_SendEmails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(EmailRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(EmailSenderServer).SendMarketingEmails(ctx, in)
+		return srv.(EmailSenderServer).SendEmails(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.EmailSender/SendMarketingEmails",
+		FullMethod: "/proto.EmailSender/SendEmails",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EmailSenderServer).SendMarketingEmails(ctx, req.(*EmailRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _EmailSender_SendEmailWithAttachment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EmailRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(EmailSenderServer).SendEmailWithAttachment(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.EmailSender/SendEmailWithAttachment",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EmailSenderServer).SendEmailWithAttachment(ctx, req.(*EmailRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _EmailSender_SendEmailWithoutAttachment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EmailRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(EmailSenderServer).SendEmailWithoutAttachment(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.EmailSender/SendEmailWithoutAttachment",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EmailSenderServer).SendEmailWithoutAttachment(ctx, req.(*EmailRequest))
+		return srv.(EmailSenderServer).SendEmails(ctx, req.(*EmailRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1552,16 +756,8 @@ var _EmailSender_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*EmailSenderServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SendMarketingEmails",
-			Handler:    _EmailSender_SendMarketingEmails_Handler,
-		},
-		{
-			MethodName: "SendEmailWithAttachment",
-			Handler:    _EmailSender_SendEmailWithAttachment_Handler,
-		},
-		{
-			MethodName: "SendEmailWithoutAttachment",
-			Handler:    _EmailSender_SendEmailWithoutAttachment_Handler,
+			MethodName: "SendEmails",
+			Handler:    _EmailSender_SendEmails_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1573,7 +769,7 @@ var _EmailSender_serviceDesc = grpc.ServiceDesc{
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type SmsSenderClient interface {
 	//this sends sms to all receipients
-	SendTextSms(ctx context.Context, in *SmsRequest, opts ...grpc.CallOption) (*SmsResponse, error)
+	SendSms(ctx context.Context, in *SmsRequest, opts ...grpc.CallOption) (*SmsResponse, error)
 }
 
 type smsSenderClient struct {
@@ -1584,9 +780,9 @@ func NewSmsSenderClient(cc *grpc.ClientConn) SmsSenderClient {
 	return &smsSenderClient{cc}
 }
 
-func (c *smsSenderClient) SendTextSms(ctx context.Context, in *SmsRequest, opts ...grpc.CallOption) (*SmsResponse, error) {
+func (c *smsSenderClient) SendSms(ctx context.Context, in *SmsRequest, opts ...grpc.CallOption) (*SmsResponse, error) {
 	out := new(SmsResponse)
-	err := c.cc.Invoke(ctx, "/proto.SmsSender/SendTextSms", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.SmsSender/SendSms", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1596,27 +792,27 @@ func (c *smsSenderClient) SendTextSms(ctx context.Context, in *SmsRequest, opts 
 // SmsSenderServer is the server API for SmsSender service.
 type SmsSenderServer interface {
 	//this sends sms to all receipients
-	SendTextSms(context.Context, *SmsRequest) (*SmsResponse, error)
+	SendSms(context.Context, *SmsRequest) (*SmsResponse, error)
 }
 
 func RegisterSmsSenderServer(s *grpc.Server, srv SmsSenderServer) {
 	s.RegisterService(&_SmsSender_serviceDesc, srv)
 }
 
-func _SmsSender_SendTextSms_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _SmsSender_SendSms_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SmsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SmsSenderServer).SendTextSms(ctx, in)
+		return srv.(SmsSenderServer).SendSms(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.SmsSender/SendTextSms",
+		FullMethod: "/proto.SmsSender/SendSms",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SmsSenderServer).SendTextSms(ctx, req.(*SmsRequest))
+		return srv.(SmsSenderServer).SendSms(ctx, req.(*SmsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1626,179 +822,74 @@ var _SmsSender_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*SmsSenderServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SendTextSms",
-			Handler:    _SmsSender_SendTextSms_Handler,
+			MethodName: "SendSms",
+			Handler:    _SmsSender_SendSms_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "notification.proto",
 }
 
-// RealTimeNotificationMethodClient is the client API for RealTimeNotificationMethod service.
+// RealTimeSenderClient is the client API for RealTimeSender service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type RealTimeNotificationMethodClient interface {
+type RealTimeSenderClient interface {
 	//sends real time notifications, broadcasting, publishing
-	SendRealTimeNotification(ctx context.Context, in *SendRealTimeRequest, opts ...grpc.CallOption) (*empty.Empty, error)
-	//retrieves history information of all notifications
-	History(ctx context.Context, in *HistoryRequest, opts ...grpc.CallOption) (*HistoryResponse, error)
-	//Unsubscribe a user from a channel
-	Unsubscribe(ctx context.Context, in *UnsubscribeRequest, opts ...grpc.CallOption) (*empty.Empty, error)
-	//disconnect a user from server
-	Disconnect(ctx context.Context, in *DisconnectRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	SendRealTime(ctx context.Context, in *SendRealTimeRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 }
 
-type realTimeNotificationMethodClient struct {
+type realTimeSenderClient struct {
 	cc *grpc.ClientConn
 }
 
-func NewRealTimeNotificationMethodClient(cc *grpc.ClientConn) RealTimeNotificationMethodClient {
-	return &realTimeNotificationMethodClient{cc}
+func NewRealTimeSenderClient(cc *grpc.ClientConn) RealTimeSenderClient {
+	return &realTimeSenderClient{cc}
 }
 
-func (c *realTimeNotificationMethodClient) SendRealTimeNotification(ctx context.Context, in *SendRealTimeRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+func (c *realTimeSenderClient) SendRealTime(ctx context.Context, in *SendRealTimeRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
 	out := new(empty.Empty)
-	err := c.cc.Invoke(ctx, "/proto.RealTimeNotificationMethod/SendRealTimeNotification", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.RealTimeSender/SendRealTime", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *realTimeNotificationMethodClient) History(ctx context.Context, in *HistoryRequest, opts ...grpc.CallOption) (*HistoryResponse, error) {
-	out := new(HistoryResponse)
-	err := c.cc.Invoke(ctx, "/proto.RealTimeNotificationMethod/History", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *realTimeNotificationMethodClient) Unsubscribe(ctx context.Context, in *UnsubscribeRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
-	err := c.cc.Invoke(ctx, "/proto.RealTimeNotificationMethod/Unsubscribe", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *realTimeNotificationMethodClient) Disconnect(ctx context.Context, in *DisconnectRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
-	err := c.cc.Invoke(ctx, "/proto.RealTimeNotificationMethod/Disconnect", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// RealTimeNotificationMethodServer is the server API for RealTimeNotificationMethod service.
-type RealTimeNotificationMethodServer interface {
+// RealTimeSenderServer is the server API for RealTimeSender service.
+type RealTimeSenderServer interface {
 	//sends real time notifications, broadcasting, publishing
-	SendRealTimeNotification(context.Context, *SendRealTimeRequest) (*empty.Empty, error)
-	//retrieves history information of all notifications
-	History(context.Context, *HistoryRequest) (*HistoryResponse, error)
-	//Unsubscribe a user from a channel
-	Unsubscribe(context.Context, *UnsubscribeRequest) (*empty.Empty, error)
-	//disconnect a user from server
-	Disconnect(context.Context, *DisconnectRequest) (*empty.Empty, error)
+	SendRealTime(context.Context, *SendRealTimeRequest) (*empty.Empty, error)
 }
 
-func RegisterRealTimeNotificationMethodServer(s *grpc.Server, srv RealTimeNotificationMethodServer) {
-	s.RegisterService(&_RealTimeNotificationMethod_serviceDesc, srv)
+func RegisterRealTimeSenderServer(s *grpc.Server, srv RealTimeSenderServer) {
+	s.RegisterService(&_RealTimeSender_serviceDesc, srv)
 }
 
-func _RealTimeNotificationMethod_SendRealTimeNotification_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _RealTimeSender_SendRealTime_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SendRealTimeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RealTimeNotificationMethodServer).SendRealTimeNotification(ctx, in)
+		return srv.(RealTimeSenderServer).SendRealTime(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.RealTimeNotificationMethod/SendRealTimeNotification",
+		FullMethod: "/proto.RealTimeSender/SendRealTime",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RealTimeNotificationMethodServer).SendRealTimeNotification(ctx, req.(*SendRealTimeRequest))
+		return srv.(RealTimeSenderServer).SendRealTime(ctx, req.(*SendRealTimeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _RealTimeNotificationMethod_History_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HistoryRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RealTimeNotificationMethodServer).History(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.RealTimeNotificationMethod/History",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RealTimeNotificationMethodServer).History(ctx, req.(*HistoryRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _RealTimeNotificationMethod_Unsubscribe_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UnsubscribeRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RealTimeNotificationMethodServer).Unsubscribe(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.RealTimeNotificationMethod/Unsubscribe",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RealTimeNotificationMethodServer).Unsubscribe(ctx, req.(*UnsubscribeRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _RealTimeNotificationMethod_Disconnect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DisconnectRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RealTimeNotificationMethodServer).Disconnect(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.RealTimeNotificationMethod/Disconnect",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RealTimeNotificationMethodServer).Disconnect(ctx, req.(*DisconnectRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _RealTimeNotificationMethod_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.RealTimeNotificationMethod",
-	HandlerType: (*RealTimeNotificationMethodServer)(nil),
+var _RealTimeSender_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "proto.RealTimeSender",
+	HandlerType: (*RealTimeSenderServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SendRealTimeNotification",
-			Handler:    _RealTimeNotificationMethod_SendRealTimeNotification_Handler,
-		},
-		{
-			MethodName: "History",
-			Handler:    _RealTimeNotificationMethod_History_Handler,
-		},
-		{
-			MethodName: "Unsubscribe",
-			Handler:    _RealTimeNotificationMethod_Unsubscribe_Handler,
-		},
-		{
-			MethodName: "Disconnect",
-			Handler:    _RealTimeNotificationMethod_Disconnect_Handler,
+			MethodName: "SendRealTime",
+			Handler:    _RealTimeSender_SendRealTime_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
