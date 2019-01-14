@@ -18,13 +18,15 @@ message NotificationRequest {
 //Emailrequest contains information about the email
 message EmailRequest {
     //this contains the email address of sender
-    string sender = 2;
-    //this is an array of strings containing the receipients email addresses
-    repeated string recipient = 3;
+    string sender = 1;
+    //this is an array of strings containing the recipients email addresses
+    repeated string recipient = 2;
     //email addresses for carbon copy
-    repeated string cc = 4;
+    repeated string cc = 3;
     //email addresses for blind carbon copy
-    repeated string bcc = 5;
+    repeated string bcc = 4;
+    //email address to which recipient can reply. Leave empty if don't want reply
+    string reply_to = 5;
     //email body in html
     string html_body = 6;
     //email body in text form , if html rendering is not supported in receiver's client
@@ -43,7 +45,7 @@ message EmailRequest {
 message SmsRequest {
     //this contains the sender id , it can be phone number, shortcode or alphanumeric string
     string sender = 1;
-    //this contains the receipients mobile numbers
+    //this contains the recipients mobile numbers
     repeated string recipient = 2;
     //this contains body of the sms
     string body = 3;
@@ -91,12 +93,12 @@ service NotificationsTypes {
 }
 
 service EmailSender {
-    //this sends email to all receipients
+    //this sends email to all recipients
     rpc SendEmails(EmailRequest) returns (EmailResponse);
 }
 
 service SmsSender {
-    //this sends sms to all receipients
+    //this sends sms to all recipients
     rpc SendSms (SmsRequest) returns (SmsResponse);
 }
 
@@ -114,3 +116,4 @@ service RealTimeSender {
 //daylight saving
 
 //TODO: goconvey tests, mocking, test implementation
+//TODO: write test for database entry and getting notifications
