@@ -20,7 +20,7 @@ message EmailRequest {
     //this contains the email address of sender
     string sender = 2;
     //this is an array of strings containing the receipients email addresses
-    repeated string receipient = 3;
+    repeated string recipient = 3;
     //email addresses for carbon copy
     repeated string cc = 4;
     //email addresses for blind carbon copy
@@ -44,7 +44,7 @@ message SmsRequest {
     //this contains the sender id , it can be phone number, shortcode or alphanumeric string
     string sender = 1;
     //this contains the receipients mobile numbers
-    repeated string receipient = 2;
+    repeated string recipient = 2;
     //this contains body of the sms
     string body = 3;
 }
@@ -78,7 +78,6 @@ service NotificationsSender {
     // fan out logic here
     rpc SendNotifications (NotificationRequest) returns (NotificationResponse);
 }
-
 
 service NotificationsTypes {
     //method to send emails
