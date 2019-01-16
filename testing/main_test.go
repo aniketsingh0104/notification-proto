@@ -6,39 +6,63 @@ import (
 	. "github.com/smartystreets/goconvey/convey"
 )
 
-func TestNotifications(t *testing.T) {
+func TestSendEmailNotifications(t *testing.T) {
+
+	Convey("receives an event (Testing SendNotifications)", t, func() {
+
+		Convey("receiving event with invalid notification id", nil)
+
+	})
 
 	Convey("receives an event", t, func() {
 
-		Convey("invalid notification id", func() {
+		Convey("event is valid, forwarding event (Testing SendNotificationEmails)", func() {
+
+			Convey("receiving event with invalid type", nil)
 
 		})
 
-		Convey("forwarding notification as email notification", func() {
+	})
 
-			Convey("invalid event type (type_url is invalid)", nil)
+	Convey("receives an event", t, func() {
 
-			Convey("invalid data", func() {
+		Convey("event is valid, forwarding event (Testing SendNotificationEmails)", func() {
 
-				Convey("recipients email ids are not present", nil)
+			Convey("receiving email event with no recipients email ids", nil)
 
-			})
+		})
 
-			Convey("get template", func() {
+	})
 
-				Convey("invalid template", nil)
+	Convey("receives an event", t, func() {
 
-				Convey("render template", func() {
+		Convey("event is valid, forwarding event (Testing SendNotificationEmails)", func() {
 
-					Convey("rendering error", nil)
+			Convey("getting invalid email template", nil)
 
-					Convey("send emails and check responses", func() {
+		})
 
-						Convey("send email with proper recipients email addresses", nil)
+	})
 
-						Convey("send invalid emails", nil)
+	Convey("receives an event", t, func() {
 
-					})
+		Convey("event is valid, forwarding event (Testing SendNotificationEmails)", func() {
+
+			Convey("email template rendering error", nil)
+
+		})
+
+	})
+
+	Convey("receives an event", t, func() {
+
+		Convey("event is valid, forwarding event", func() {
+
+			Convey("getting valid email template, forwarding email", func() {
+
+				Convey("email template rendering successful", func() {
+
+					Convey("Send email with proper recipients email ids", nil)
 
 				})
 
