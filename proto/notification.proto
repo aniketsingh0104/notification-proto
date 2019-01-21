@@ -89,7 +89,7 @@ service NotificationsTypes {
     //method to send sms
     rpc SendNotificationSms (NotificationRequest) returns (NotificationResponse);
     //send real time notifications, get history of realTimeNotifications
-    rpc SendNotificationRealTime (NotificationRequest) returns (google.protobuf.Any);
+    rpc SendNotificationRealTime (NotificationRequest) returns (google.protobuf.Empty);
 }
 
 service EmailSender {
