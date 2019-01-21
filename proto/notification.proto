@@ -4,6 +4,31 @@ package proto;
 
 import "google/protobuf/any.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+
+
+//Sample data messages
+message PushNotificationEventDataReq {
+    string event_type = 1;
+    google.protobuf.Any request_data = 2;
+    google.protobuf.Any response_data = 3;
+    google.protobuf.Timestamp created_on = 4;
+    google.protobuf.Timestamp created_by = 5;
+}
+
+message ReqEventData {
+    repeated string recipients = 1;
+    string html_body = 2;
+    string subject = 3;
+}
+
+message ResEventData {
+    repeated string recipients = 1;
+    string html_body = 2;
+    string subject = 3;
+    string response = 4;
+}
 
 //Notification request contains the type of notification to be processed
 message NotificationRequest {
